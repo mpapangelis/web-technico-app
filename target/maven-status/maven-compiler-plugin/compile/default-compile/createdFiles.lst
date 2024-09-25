@@ -20,6 +20,7 @@ com\example\webtechnico\resources\PropertyOwnerResource.class
 com\example\webtechnico\models\Admin.class
 com\example\webtechnico\exceptions\PropertyNotFoundException.class
 com\example\webtechnico\models\TypeOfRepairEnum.class
+com\example\webtechnico\security\CorsManagement.class
 com\example\webtechnico\models\PropertyType.class
 com\example\webtechnico\repositories\AdminRepository.class
 com\example\webtechnico\exceptions\InvalidYearException.class

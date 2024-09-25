@@ -14,4 +14,5 @@ public interface PropertyService {
     List<Property> findByOwnerVatNumber(Long vatNumber);
     Property deleteProperty(Long id);
     Property softDeleteProperty(Long id);
+    List<Property> findPropertiesByOwnerId(Long ownerId);
 }

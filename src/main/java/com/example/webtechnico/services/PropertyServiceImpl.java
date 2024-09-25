@@ -29,11 +29,15 @@ public class PropertyServiceImpl implements PropertyService{
     @Override
     public Optional<Property> findByPropertyIdNumber(Long propertyIdNumber) {
         return propertyRepository.findByPropertyIdNumber(propertyIdNumber);
-    }
+    }//TODO
 
     @Override
     public List<Property> findByOwnerVatNumber(Long vatNumber) {
-        return propertyRepository.findByOwnerVatNumber(vatNumber);
+        List<Property> properties = propertyRepository.findByOwnerVatNumber(vatNumber);
+        if (properties.isEmpty()) {
+            throw new ResourceNotFoundException("No properties found for owner with VAT number " + vatNumber);
+        }
+        return properties;
     }
 
     @Override
@@ -134,6 +138,15 @@ public class PropertyServiceImpl implements PropertyService{
         Property propertyToDelete = propertyToDeleteCheck.get();
         propertyRepository.softDelete(propertyToDelete);
         return propertyToDelete;
+    }
+
+    @Override
+    public List<Property> findPropertiesByOwnerId(Long ownerId) {
+        List<Property> properties = propertyRepository.findByOwnerId(ownerId);
+        if (properties.isEmpty()) {
+            throw new ResourceNotFoundException("No properties found for owner with ID " + ownerId);
+        }
+        return properties;
     }
 
     

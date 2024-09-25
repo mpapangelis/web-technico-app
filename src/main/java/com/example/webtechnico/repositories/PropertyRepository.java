@@ -32,25 +32,25 @@ public class PropertyRepository implements Repository<Property> {
         return property;
     }
 
+    @Transactional
     @Override
     public void update(Property property) {
-        entityManager.getTransaction().begin();
         entityManager.merge(property);
-        entityManager.getTransaction().commit();
     }
 
+    @Transactional
     @Override
     public void delete(Property property) {
-        entityManager.getTransaction().begin();
+        if (!entityManager.contains(property)) {
+            property = entityManager.merge(property);
+        }
         entityManager.remove(property);
-        entityManager.getTransaction().commit();
     }
     
+    @Transactional
     public void softDelete(Property property) {
-        entityManager.getTransaction().begin();
         property.setIsActive(false);
         entityManager.merge(property);
-        entityManager.getTransaction().commit();
     }
 
     @Override
@@ -94,6 +94,13 @@ public class PropertyRepository implements Repository<Property> {
         TypedQuery<Property> query = entityManager.createQuery(
             "SELECT p FROM Property p WHERE p.propertyOwner.vat = :vatNumber AND p.isActive = true", Property.class);
         query.setParameter("vatNumber", vatNumber);
+        return query.getResultList();
+    }
+    
+    public List<Property> findByOwnerId(Long ownerId) {
+        TypedQuery<Property> query = entityManager.createQuery(
+                "SELECT p FROM Property p WHERE p.propertyOwner.id = :ownerId AND p.isActive = true", Property.class);
+        query.setParameter("ownerId", ownerId);
         return query.getResultList();
     }
 
