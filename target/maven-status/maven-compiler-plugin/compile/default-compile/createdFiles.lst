@@ -1,6 +1,10 @@
+com\example\webtechnico\resources\AdminResource.class
 com\example\webtechnico\models\PropertyOwner.class
+com\example\webtechnico\services\PropertyRepairServiceImpl.class
 com\example\webtechnico\services\PropertyService.class
+com\example\webtechnico\resources\PropertyRepairResource.class
 com\example\webtechnico\models\Property$PropertyBuilder.class
+com\example\webtechnico\services\AdminServiceImpl.class
 com\example\webtechnico\exceptions\PropertyOwnerExistsException.class
 com\example\webtechnico\exceptions\ResourceNotFoundException.class
 com\example\webtechnico\repositories\Repository.class
@@ -19,6 +23,7 @@ com\example\webtechnico\resources\JakartaEE10Resource.class
 com\example\webtechnico\resources\PropertyOwnerResource.class
 com\example\webtechnico\models\Admin.class
 com\example\webtechnico\exceptions\PropertyNotFoundException.class
+com\example\webtechnico\services\AdminService.class
 com\example\webtechnico\models\TypeOfRepairEnum.class
 com\example\webtechnico\security\CorsManagement.class
 com\example\webtechnico\models\PropertyType.class
@@ -31,4 +36,5 @@ com\example\webtechnico\exceptions\DuplicateEntryException.class
 com\example\webtechnico\repositories\PropertyRepository.class
 com\example\webtechnico\models\PropertyRepair$PropertyRepairBuilder.class
 com\example\webtechnico\services\PropertyServiceImpl.class
+com\example\webtechnico\services\PropertyRepairService.class
 com\example\webtechnico\models\Property.class

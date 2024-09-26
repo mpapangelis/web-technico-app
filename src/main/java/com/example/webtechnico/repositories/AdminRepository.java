@@ -4,19 +4,24 @@ package com.example.webtechnico.repositories;
 import com.example.webtechnico.models.Admin;
 import com.example.webtechnico.models.PropertyRepair;
 import com.example.webtechnico.models.StatusOfRepairEnum;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Named;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
+import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-
+@Named("AdminRepoDb")
+@ApplicationScoped
+@Slf4j
+@NoArgsConstructor
 public class AdminRepository {
 
+    @PersistenceContext
     private EntityManager entityManager;
-
-    public AdminRepository(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
 
     public Admin createAdmin(Admin admin) {
         if (getAdmin() != null) {

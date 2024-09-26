@@ -1,5 +1,6 @@
 package com.example.webtechnico.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -22,7 +23,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PropertyRepair implements Serializable {
+public class PropertyRepair {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,21 +33,22 @@ public class PropertyRepair implements Serializable {
 //    @JoinColumn(name = "propertyOwner_id")
 //    private PropertyOwner propertyOwner;
 //
-//    @ManyToOne
-//    @JoinColumn(name = "property_id")
-//    private Property property;
+    @ManyToOne
+    @JoinColumn(name = "property_id")
+    private Property property;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
+    //@Column(nullable = false)
+    //@Enumerated(EnumType.STRING)
     private TypeOfRepairEnum typeOfRepair; //Enum
 
-    @Column(nullable = false)
+    //@Column(nullable = false)
     private String shortDescription;
 
-    @Column(nullable = false)
+    //@Column(nullable = false)
+    @JsonIgnore
     private LocalDate submissionDate;
 
-    @Column(nullable = false)
+    //@Column(nullable = false)
     private String description;
 
     private LocalDate proposedStartDate;
@@ -57,16 +59,14 @@ public class PropertyRepair implements Serializable {
 
     private boolean ownerAcceptance;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
+    //@Column(nullable = false)
+    //@Enumerated(EnumType.STRING)
     private StatusOfRepairEnum status;
 
     private LocalDate actualStartDate;
 
     private LocalDate actualEndDate;
-    // Constructors, Getters, Setters, toString() from lombok
     
-    @Column(name = "isActive", nullable = false)
     private Boolean isActive;
 
 //    @Override

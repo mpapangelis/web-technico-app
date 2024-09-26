@@ -3,40 +3,40 @@ package com.example.webtechnico.repositories;
 
 import com.example.webtechnico.exceptions.OwnerNotFoundException;
 import com.example.webtechnico.models.PropertyRepair;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Named;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
 import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import lombok.NoArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
 
+@Named("PropertyRepairRepoDb")
 @Slf4j
+@NoArgsConstructor
+@ApplicationScoped
 public class PropertyRepairRepository implements Repository<PropertyRepair> {
 
+    @PersistenceContext
     private EntityManager entityManager;
 
-    public PropertyRepairRepository(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
-
+    @Transactional
     @Override
     public PropertyRepair create(PropertyRepair propertyRepair) {
-        entityManager.getTransaction().begin();
         entityManager.persist(propertyRepair);
-        entityManager.getTransaction().commit();
         return propertyRepair;
     }
 
+    @Transactional
     @Override
-    public void update(PropertyRepair v) throws PersistenceException {
-        if (v instanceof PropertyRepair) {
-            PropertyRepair repair = (PropertyRepair) v;
-            entityManager.getTransaction().begin();
-            entityManager.merge(repair);//Ενημερώνει τον πίνακα με τα νέα δεδομένα 
-            entityManager.getTransaction().commit();
-        }
+    public void update(PropertyRepair propertyRepair) {
+        entityManager.merge(propertyRepair);
     }
 
     @Override
@@ -91,9 +91,7 @@ public class PropertyRepairRepository implements Repository<PropertyRepair> {
     @Override
     public <V> Optional<PropertyRepair> findById(V id) {
         try {
-            entityManager.getTransaction().begin();
             PropertyRepair repair = entityManager.find(PropertyRepair.class, id);
-            entityManager.getTransaction().commit();
             return Optional.of(repair);
         } catch (Exception e) {
             log.debug("Property's repair not found");
