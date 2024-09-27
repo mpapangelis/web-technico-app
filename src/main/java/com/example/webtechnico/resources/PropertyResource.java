@@ -33,6 +33,12 @@ public class PropertyResource {
     @Named("PropertyService")
     private PropertyService propertyService;
     
+    /**
+     * Creates a new property.
+     *
+     * @param property The Property object containing the details of the property to be created.
+     * @return Response containing the created Property object.
+     */
     @PermitAll
     @POST
     @Path("/create")
@@ -55,6 +61,12 @@ public class PropertyResource {
         }
     }
     
+    /**
+     * Soft deletes a property by setting its isActive status to false.
+     *
+     * @param id The ID of the property to be soft deleted.
+     * @return Response containing the soft deleted Property object.
+     */
     @PermitAll
     @DELETE
     @Path("/softDelete/{id}")
@@ -74,6 +86,12 @@ public class PropertyResource {
         }
     }
     
+    /**
+     * Finds properties by the owner's VAT number.
+     *
+     * @param vatNumber The VAT number of the property owner.
+     * @return Response containing a list of properties associated with the specified VAT number.
+     */
     @PermitAll
     @GET
     @Path("/owner/vat/{vatNumber}")
@@ -93,6 +111,12 @@ public class PropertyResource {
         }
     }
     
+    /**
+     * Finds a property by its identification number (propertyId).
+     *
+     * @param propertyId The identification number of the property.
+     * @return Response containing the Property object, if found.
+     */
     @PermitAll
     @GET
     @Path("/propertyId/{propertyId}")
@@ -113,6 +137,12 @@ public class PropertyResource {
         }
     }
     
+    /**
+     * Hard deletes a property, removing it from the database.
+     *
+     * @param id The ID of the property to be hard deleted.
+     * @return Response indicating whether the deletion was successful.
+     */
     @PermitAll
     @DELETE
     @Path("/hardDelete/{id}")
@@ -135,6 +165,13 @@ public class PropertyResource {
         }
     }
     
+    /**
+     * Updates the details of a property.
+     *
+     * @param id The ID of the property to be updated.
+     * @param property The Property object containing updated details.
+     * @return Response containing the updated Property object.
+     */
     @PermitAll
     @PUT
     @Path("/update/{id}")
@@ -174,6 +211,12 @@ public class PropertyResource {
         }
     }
     
+    /**
+     * Finds properties by the owner's ID.
+     *
+     * @param ownerId The ID of the property owner.
+     * @return Response containing a list of properties associated with the specified owner ID.
+     */
     @PermitAll
     @GET
     @Path("/owner/id/{ownerId}")
@@ -193,6 +236,12 @@ public class PropertyResource {
         }
     }
     
+    /**
+     * Finds a property by its primary key ID.
+     *
+     * @param id The primary key ID of the property.
+     * @return Response containing the Property object, if found.
+     */
     @PermitAll
     @GET
     @Path("/{id}")

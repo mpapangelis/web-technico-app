@@ -29,6 +29,12 @@ public class PropertyRepairResource {
     @Named("PropertyRepairService")
     private PropertyRepairService propertyRepairService;
     
+    /**
+     * Initiates a new property repair.
+     *
+     * @param propertyRepair The PropertyRepair object containing the details of the repair to be initiated.
+     * @return Response containing the initiated PropertyRepair object.
+     */
     @PermitAll
     @POST
     @Path("/initiate")
@@ -49,6 +55,12 @@ public class PropertyRepairResource {
         }
     }
     
+    /**
+     * Soft deletes a property repair by setting its isActive status to false.
+     *
+     * @param repairId The ID of the property repair to be soft deleted.
+     * @return Response indicating the result of the operation.
+     */
     @PermitAll
     @DELETE
     @Path("/softDelete/{id}")
@@ -68,6 +80,12 @@ public class PropertyRepairResource {
         }
     }
     
+    /**
+     * Hard deletes a property repair.
+     *
+     * @param id The ID of the property repair to be hard deleted.
+     * @return Response indicating whether the deletion was successful or not.
+     */
     @PermitAll
     @DELETE
     @Path("/hardDelete/{id}")
@@ -89,6 +107,13 @@ public class PropertyRepairResource {
         }
     }
     
+    /**
+     * Searches for property repairs within a specified date range.
+     *
+     * @param startDate The start date of the range.
+     * @param endDate The end date of the range.
+     * @return Response containing a list of PropertyRepair objects within the specified date range.
+     */
     @PermitAll
     @GET
     @Path("/searchByDateRange")
@@ -104,6 +129,12 @@ public class PropertyRepairResource {
         }
     }
     
+    /**
+     * Searches for property repairs by submission date.
+     *
+     * @param submissionDate The date of submission.
+     * @return Response containing a list of PropertyRepair objects submitted on the specified date.
+     */
     @PermitAll
     @GET
     @Path("/searchBySubmissionDate")
@@ -119,6 +150,12 @@ public class PropertyRepairResource {
         }
     }
     
+    /**
+     * Searches for property repairs by owner ID.
+     *
+     * @param ownerId The ID of the owner.
+     * @return Response containing a list of PropertyRepair objects associated with the specified owner.
+     */
     @PermitAll
     @GET
     @Path("/searchByOwnerId")
@@ -138,6 +175,13 @@ public class PropertyRepairResource {
         }
     }
     
+    /**
+     * Updates a property repair with the given details.
+     *
+     * @param repairId The ID of the property repair to update.
+     * @param propertyRepair The PropertyRepair object containing updated details.
+     * @return Response containing the updated PropertyRepair object.
+     */
     @PermitAll
     @PUT
     @Path("/update/{repairId}")

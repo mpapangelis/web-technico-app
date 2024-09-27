@@ -26,6 +26,11 @@ public class AdminResource {
     @Named("AdminService")
     private AdminService adminService;
     
+    /**
+     * Retrieves all active property repairs.
+     * 
+     * @return Response containing a list of active property repairs.
+     */
     @PermitAll
     @GET
     @Path("/repairs/active")
@@ -45,6 +50,11 @@ public class AdminResource {
         }
     }
     
+    /**
+     * Retrieves all inactive property repairs.
+     *
+     * @return Response containing a list of inactive property repairs.
+     */
     @PermitAll
     @GET
     @Path("/repairs/inactive")
@@ -64,6 +74,11 @@ public class AdminResource {
         }
     }
     
+    /**
+     * Retrieves all pending property repairs.
+     *
+     * @return Response containing a list of pending property repairs.
+     */
     @PermitAll
     @GET
     @Path("/repairs/pending")
@@ -83,6 +98,11 @@ public class AdminResource {
         }
     }
     
+    /**
+     * Retrieves all properties.
+     *
+     * @return Response containing a list of all properties.
+     */
     @PermitAll
     @GET
     @Path("/properties")
@@ -98,6 +118,32 @@ public class AdminResource {
         }
     }
     
+    /**
+     * Retrieves all property repairs.
+     *
+     * @return Response containing a list of all property repairs.
+     */
+    @GET
+    @Path("/repairs")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllRepairs() {
+        try {
+            List<PropertyRepair> repairs = adminService.getAllRepairs();
+            return Response.ok(repairs).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                           .entity("Error retrieving repairs: " + e.getMessage())
+                           .build();
+        }
+    }
+    
+    /**
+     * Updates the repair proposition with the given details.
+     *
+     * @param repairId        ID of the repair to update.
+     * @param propertyRepair  PropertyRepair object containing the updated details.
+     * @return Response containing the updated PropertyRepair.
+     */
     @PermitAll
     @POST
     @Path("/repairProposition/{repairId}")

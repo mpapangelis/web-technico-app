@@ -27,7 +27,12 @@ public class PropertyOwnerResource {
     @Named("PropertyOwnerService")
     private PropertyOwnerService propertyOwnerService;
     
-    
+    /**
+     * Creates a new property owner.
+     *
+     * @param propertyOwner The PropertyOwner object to create.
+     * @return Response containing the created PropertyOwner.
+     */
     @PermitAll
     @POST
     @Path("/create")
@@ -47,6 +52,12 @@ public class PropertyOwnerResource {
         return Response.ok(propertyOwner).build();
     }
     
+    /**
+     * Retrieves a property owner by their ID.
+     *
+     * @param id The ID of the property owner.
+     * @return Response containing the PropertyOwner if found, otherwise an error message.
+     */
     @PermitAll
     @GET
     @Path("/{id}")
@@ -62,6 +73,12 @@ public class PropertyOwnerResource {
         }
     }
     
+    /**
+     * Soft deletes a property owner by setting their isActive status to false.
+     *
+     * @param id The ID of the property owner to soft delete.
+     * @return Response indicating the result of the operation.
+     */
     @PermitAll
     @DELETE
     @Path("/softDelete/{id}")
@@ -81,6 +98,11 @@ public class PropertyOwnerResource {
         }
     }
     
+    /**
+     * Retrieves all property owners.
+     *
+     * @return Response containing a list of all PropertyOwners.
+     */
     @PermitAll
     @GET
     @Path("/findAll")
@@ -96,6 +118,12 @@ public class PropertyOwnerResource {
         }
     }
     
+    /**
+     * Hard deletes a property owner by their ID.
+     *
+     * @param id The ID of the property owner to delete.
+     * @return Response indicating the result of the operation.
+     */
     @PermitAll
     @DELETE
     @Path("/hardDelete/{id}")
@@ -115,6 +143,13 @@ public class PropertyOwnerResource {
         }
     }
     
+    /**
+     * Updates a property owner's details.
+     *
+     * @param id            The ID of the property owner to update.
+     * @param propertyOwner The PropertyOwner object containing updated details.
+     * @return Response containing the updated PropertyOwner.
+     */
     @PermitAll
     @PUT
     @Path("/update/{id}")
@@ -148,6 +183,12 @@ public class PropertyOwnerResource {
         }
     }
     
+    /**
+     * Retrieves a property owner by their email.
+     *
+     * @param email The email of the property owner.
+     * @return Response containing the PropertyOwner if found, otherwise an error message.
+     */
     @PermitAll
     @GET
     @Path("/findByEmail/{email}")
@@ -167,6 +208,12 @@ public class PropertyOwnerResource {
         }
     }
     
+    /**
+     * Retrieves a property owner by their VAT number.
+     *
+     * @param vat The VAT number of the property owner.
+     * @return Response containing the PropertyOwner if found, otherwise an error message.
+     */
     @PermitAll
     @GET
     @Path("/findByVat/{vat}")
