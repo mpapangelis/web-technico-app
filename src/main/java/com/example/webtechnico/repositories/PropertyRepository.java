@@ -48,6 +48,22 @@ public class PropertyRepository implements Repository<Property> {
     }
     
     @Transactional
+    public boolean deleteById(Long id) {
+        try {
+            Property property = entityManager.find(Property.class, id);
+            if (property != null) {
+                entityManager.remove(property);
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return false;
+        }
+    }
+
+    
+    @Transactional
     public void softDelete(Property property) {
         property.setIsActive(false);
         entityManager.merge(property);

@@ -13,7 +13,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.util.Date;
-//import javax.persistence.*;
 
 import lombok.*;
 
@@ -33,8 +32,6 @@ public class PropertyRepair {
     @JoinColumn(name = "property_id")
     private Property property;
 
-    //@Column(nullable = false)
-    //@Enumerated(EnumType.STRING)
     private TypeOfRepairEnum typeOfRepair;
 
     private String shortDescription;
@@ -43,7 +40,6 @@ public class PropertyRepair {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
     private Date submissionDate;
 
-    //@Column(nullable = false)
     private String description;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -58,8 +54,6 @@ public class PropertyRepair {
 
     private boolean ownerAcceptance;
 
-    //@Column(nullable = false)
-    //@Enumerated(EnumType.STRING)
     private StatusOfRepairEnum status;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -71,9 +65,4 @@ public class PropertyRepair {
     private Date actualEndDate;
     
     private Boolean isActive;
-
-//    @Override
-//    public String toString() {
-//        return "PropertyRepair{" + "repairId=" + repairId + ", propertyOwner=" + propertyOwner.getId() + ", property=" + property.getId() + ", typeOfRepair=" + typeOfRepair + ", shortDescription=" + shortDescription + ", submissionDate=" + submissionDate + ", description=" + description + ", proposedStartDate=" + proposedStartDate + ", proposedEndDate=" + proposedEndDate + ", proposedCost=" + proposedCost + ", ownerAcceptance=" + ownerAcceptance + ", status=" + status + ", actualStartDate=" + actualStartDate + ", actualEndDate=" + actualEndDate + ", isActive=" + isActive +'}';
-//    }
 }

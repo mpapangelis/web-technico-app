@@ -14,8 +14,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-//import javax.persistence.*;
-import java.io.Serializable;
 import java.util.List;
 
 @Data
@@ -24,7 +22,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Table(name = "propertyOwner")
-//implements Serializable eixa etsi to class
 public class PropertyOwner  {
 
     @Id
@@ -55,14 +52,10 @@ public class PropertyOwner  {
     //@Column(name = "password", nullable = false)
     private String password;
     
-    //@Column(name = "isActive", nullable = false)
     private Boolean isActive;
 
     @OneToMany(mappedBy = "propertyOwner", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Property> properties;
-//
-//    @OneToMany(mappedBy = "propertyOwner", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<PropertyRepair> propertyRepairs;
     
 }

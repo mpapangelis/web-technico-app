@@ -4,6 +4,7 @@ package com.example.webtechnico.services;
 import com.example.webtechnico.exceptions.OwnerNotFoundException;
 import com.example.webtechnico.exceptions.PropertyNotFoundException;
 import com.example.webtechnico.exceptions.PropertyOwnerExistsException;
+import com.example.webtechnico.exceptions.ResourceNotFoundException;
 import com.example.webtechnico.models.Property;
 import com.example.webtechnico.models.PropertyOwner;
 import com.example.webtechnico.models.PropertyRepair;
@@ -18,6 +19,7 @@ import jakarta.inject.Named;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Named("PropertyRepairService")
@@ -132,12 +134,12 @@ public class PropertyRepairServiceImpl implements PropertyRepairService {
 //    }
 
     @Override
-    public List<PropertyRepair> searchRepairsByDateRage(LocalDate startDate, LocalDate endDate) {
+    public List<PropertyRepair> searchRepairsByDateRange(Date startDate, Date endDate) {
         return propertyRepairRepository.searchByDateRange(startDate, endDate);
     }
 
     @Override
-    public List<PropertyRepair> searchRepairsBySubmissionDate(LocalDate submissionDate) {
+    public List<PropertyRepair> searchRepairsBySubmissionDate(Date submissionDate) {
         return propertyRepairRepository.searchBySubmissionDate(submissionDate);
     }
 
@@ -152,5 +154,84 @@ public class PropertyRepairServiceImpl implements PropertyRepairService {
         } else {
             throw new IllegalStateException("Repair is not pending and cannot be deleted");
         }
+    }
+
+    @Override
+    public List<PropertyRepair> searchRepairsByOwnerId(Long ownerId) {
+        return propertyRepairRepository.searchByOwnerId(ownerId);
+    }
+    
+    @Override
+    public boolean delete(Long id) throws ResourceNotFoundException {
+        boolean deleted = propertyRepairRepository.deleteById(id);
+        if (!deleted) {
+            throw new ResourceNotFoundException("Property Repair with ID " + id + " not found.");
+        }
+        return deleted;
+    }
+
+    @Override
+    public PropertyRepair updatePropertyRepair(Long repairId, Long propertyId, TypeOfRepairEnum typeOfRepair,
+            String shortDescription, String description,
+            Date proposedStartDate, Date proposedEndDate,
+            int proposedCost, boolean ownerAcceptance,
+            StatusOfRepairEnum status, Date actualStartDate, Date actualEndDate) {
+        
+        Optional<PropertyRepair> repairToUpdateCheck = propertyRepairRepository.findById(repairId);
+        if (!repairToUpdateCheck.isPresent() || !repairToUpdateCheck.get().getIsActive()) {
+            throw new ResourceNotFoundException("PropertyRepair with ID " + repairId + " does not exist or is inactive.");
+        }
+
+        PropertyRepair repairToUpdate = repairToUpdateCheck.get();
+
+        if (propertyId != null) {
+            Optional<Property> property = propertyRepository.findById(propertyId);
+            if (!property.isPresent()) {
+                throw new PropertyNotFoundException("Property with ID " + propertyId + " does not exist.");
+            }
+            repairToUpdate.setProperty(property.get());
+        }
+
+        if (typeOfRepair != null) {
+            repairToUpdate.setTypeOfRepair(typeOfRepair);
+        }
+
+        if (shortDescription != null) {
+            repairToUpdate.setShortDescription(shortDescription);
+        }
+
+        if (description != null) {
+            repairToUpdate.setDescription(description);
+        }
+
+        if (proposedStartDate != null) {
+            repairToUpdate.setProposedStartDate(proposedStartDate);
+        }
+
+        if (proposedEndDate != null) {
+            repairToUpdate.setProposedEndDate(proposedEndDate);
+        }
+
+        if (proposedCost >= 0) {
+            repairToUpdate.setProposedCost(proposedCost);
+        }
+
+        repairToUpdate.setOwnerAcceptance(ownerAcceptance);
+
+        if (status != null) {
+            repairToUpdate.setStatus(status);
+        }
+
+        if (actualStartDate != null) {
+            repairToUpdate.setActualStartDate(actualStartDate);
+        }
+
+        if (actualEndDate != null) {
+            repairToUpdate.setActualEndDate(actualEndDate);
+        }
+
+        propertyRepairRepository.update(repairToUpdate);
+
+        return repairToUpdate;
     }
 }

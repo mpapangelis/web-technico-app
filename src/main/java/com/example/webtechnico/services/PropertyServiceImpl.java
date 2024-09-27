@@ -123,9 +123,12 @@ public class PropertyServiceImpl implements PropertyService{
             throw new ResourceNotFoundException("Property with ID " + id + " does not exist or is inactive.");
         }
         
-        Property propertyToDelete = propertyToDeleteCheck.get();
-        propertyRepository.delete(propertyToDelete);
-        return propertyToDelete;
+        boolean isDeleted = propertyRepository.deleteById(id);
+        if (!isDeleted) {
+            throw new RuntimeException("Failed to delete Property with ID " + id);
+        }
+
+        return propertyToDeleteCheck.get();
     }
     
     @Override

@@ -11,6 +11,7 @@ import jakarta.persistence.PersistenceException;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import lombok.NoArgsConstructor;
@@ -39,43 +40,62 @@ public class PropertyRepairRepository implements Repository<PropertyRepair> {
         entityManager.merge(propertyRepair);
     }
 
+    @Transactional
     @Override
     public void delete(PropertyRepair propertyRepair) {
-        entityManager.getTransaction().begin();
+        if (!entityManager.contains(propertyRepair)) {
+            propertyRepair = entityManager.merge(propertyRepair);
+        }
         entityManager.remove(propertyRepair);
-        entityManager.getTransaction().commit();
+    }
+    
+    @Transactional
+    public boolean deleteById(Long id) {
+        try {
+            PropertyRepair repair = entityManager.find(PropertyRepair.class, id);
+            if (repair != null) {
+                entityManager.remove(repair);
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return false;
+        }
     }
 
-    public List<PropertyRepair> searchByDateRange(LocalDate startDate, LocalDate endDate) {
-        TypedQuery<PropertyRepair> query;
-        query = entityManager.createQuery(
-                "SELECT r FROM PropertyRepair r WHERE isActive = TRUE AND r.submissionDate BETWEEN :startDate AND :endDate", PropertyRepair.class);
+    public List<PropertyRepair> searchByDateRange(Date startDate, Date endDate) {
+        TypedQuery<PropertyRepair> query = entityManager.createQuery(
+                "SELECT r FROM PropertyRepair r WHERE isActive = TRUE AND DATE(r.submissionDate) BETWEEN DATE(:startDate) AND DATE(:endDate)", PropertyRepair.class);
         query.setParameter("startDate", startDate);
         query.setParameter("endDate", endDate);
-        if (query.getResultList().isEmpty()) {
-            throw new OwnerNotFoundException("There is no Repair between" + startDate + "and" + endDate);
+        List<PropertyRepair> repairs = query.getResultList();
+        if (repairs.isEmpty()) {
+            throw new OwnerNotFoundException("There is no Repair between " + startDate + " and " + endDate);
         }
-        return query.getResultList();
+        return repairs;
     }
 
-    public List<PropertyRepair> searchBySubmissionDate(LocalDate submissionDate) {
+    public List<PropertyRepair> searchBySubmissionDate(Date submissionDate) {
         TypedQuery<PropertyRepair> query = entityManager.createQuery(
-                "SELECT r FROM PropertyRepair r WHERE r.submissionDate = :submissionDate AND isActive = TRUE", PropertyRepair.class);
+                "SELECT r FROM PropertyRepair r WHERE DATE(r.submissionDate) = DATE(:submissionDate) AND isActive = TRUE", PropertyRepair.class);
         query.setParameter("submissionDate", submissionDate);
-        if (query.getResultList().isEmpty()) {
-            throw new OwnerNotFoundException("There is no Property Repair at" + submissionDate);
+        List<PropertyRepair> repairs = query.getResultList();
+        if (repairs.isEmpty()) {
+            throw new OwnerNotFoundException("There is no Property Repair on " + submissionDate);
         }
-        return query.getResultList();
+        return repairs;
     }
 
     public List<PropertyRepair> searchByOwnerId(Long ownerId) {
         TypedQuery<PropertyRepair> query = entityManager.createQuery(
-                "SELECT r FROM PropertyRepair r WHERE r.ownerId = :ownerId AND isActive = TRUE", PropertyRepair.class);
+                "SELECT r FROM PropertyRepair r WHERE r.property.propertyOwner.id = :ownerId AND r.isActive = TRUE", PropertyRepair.class);
         query.setParameter("ownerId", ownerId);
-        if (query.getResultList().isEmpty()) {
-            throw new OwnerNotFoundException("There is no Owner :" + ownerId);
+        List<PropertyRepair> repairs = query.getResultList();
+        if (repairs.isEmpty()) {
+            throw new OwnerNotFoundException("There is no Repair for owner with ID: " + ownerId);
         }
-        return query.getResultList();
+        return repairs;
     }
 
     @Override

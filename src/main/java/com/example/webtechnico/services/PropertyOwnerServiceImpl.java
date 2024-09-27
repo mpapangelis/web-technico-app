@@ -131,10 +131,6 @@ public class PropertyOwnerServiceImpl implements PropertyOwnerService{
         }
 
         if (email != null) {
-//            Optional<PropertyOwner> existingOwnerWithSameEmail = propertyOwnerRepository.searchByEmail(email);
-//            if (existingOwnerWithSameEmail.isPresent() && !existingOwnerWithSameEmail.get().getId().equals(id)) {
-//                throw new DuplicateEntryException("Email " + email + " is already associated with another owner.");
-//            }
             ownerToUpdate.setEmail(email);
         }
 

@@ -29,8 +29,10 @@ com\example\webtechnico\security\CorsManagement.class
 com\example\webtechnico\models\PropertyType.class
 com\example\webtechnico\repositories\AdminRepository.class
 com\example\webtechnico\exceptions\InvalidYearException.class
+com\example\webtechnico\utils\DateParamConverterProvider$1.class
 com\example\webtechnico\JakartaRestConfiguration.class
 com\example\webtechnico\resources\PropertyResource.class
+com\example\webtechnico\utils\DateParamConverterProvider.class
 com\example\webtechnico\services\PropertyOwnerServiceImpl.class
 com\example\webtechnico\exceptions\DuplicateEntryException.class
 com\example\webtechnico\repositories\PropertyRepository.class
