@@ -1,6 +1,6 @@
 package com.example.webtechnico.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -10,9 +10,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import java.util.Date;
 //import javax.persistence.*;
 
 import lombok.*;
@@ -29,31 +29,30 @@ public class PropertyRepair {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long repairId;
 
-//    @ManyToOne
-//    @JoinColumn(name = "propertyOwner_id")
-//    private PropertyOwner propertyOwner;
-//
     @ManyToOne
     @JoinColumn(name = "property_id")
     private Property property;
 
     //@Column(nullable = false)
     //@Enumerated(EnumType.STRING)
-    private TypeOfRepairEnum typeOfRepair; //Enum
+    private TypeOfRepairEnum typeOfRepair;
 
-    //@Column(nullable = false)
     private String shortDescription;
 
-    //@Column(nullable = false)
-    @JsonIgnore
-    private LocalDate submissionDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
+    private Date submissionDate;
 
     //@Column(nullable = false)
     private String description;
 
-    private LocalDate proposedStartDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
+    private Date proposedStartDate;
 
-    private LocalDate proposedEndDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
+    private Date proposedEndDate;
 
     private int proposedCost;
 
@@ -63,9 +62,13 @@ public class PropertyRepair {
     //@Enumerated(EnumType.STRING)
     private StatusOfRepairEnum status;
 
-    private LocalDate actualStartDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
+    private Date actualStartDate;
 
-    private LocalDate actualEndDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
+    private Date actualEndDate;
     
     private Boolean isActive;
 

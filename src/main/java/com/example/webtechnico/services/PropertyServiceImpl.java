@@ -149,6 +149,11 @@ public class PropertyServiceImpl implements PropertyService{
         return properties;
     }
 
+    @Override
+    public Optional<Property> findById(Long id) {
+        return propertyRepository.findById(id);
+    }
+
     
     
 }

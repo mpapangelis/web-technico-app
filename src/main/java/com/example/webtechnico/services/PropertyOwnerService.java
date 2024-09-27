@@ -4,6 +4,7 @@ package com.example.webtechnico.services;
 
 
 
+import com.example.webtechnico.exceptions.OwnerNotFoundException;
 import com.example.webtechnico.models.PropertyOwner;
 import jakarta.persistence.PersistenceException;
 import java.util.List;
@@ -23,9 +24,10 @@ public interface PropertyOwnerService {
 
     void delete(Long id);
 
-    void update(PropertyOwner Owner);
+    PropertyOwner update(Long id, String firstName, String lastName, String email, String userName, String phoneNumber, String address, Long vat);
     void softDelete(Long id) throws PersistenceException;
     List<PropertyOwner> findAll();
-    
+    PropertyOwner findByEmail(String email) throws OwnerNotFoundException;
+    PropertyOwner findByVat(Long vat) throws OwnerNotFoundException;
     
 }

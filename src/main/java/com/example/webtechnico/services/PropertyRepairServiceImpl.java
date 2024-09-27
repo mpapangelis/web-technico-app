@@ -16,6 +16,7 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,7 +46,7 @@ public class PropertyRepairServiceImpl implements PropertyRepairService {
                 .shortDescription(shortDescription)
                 .property(property)
                 .typeOfRepair(typeOfRepair)
-                .submissionDate(LocalDate.now())
+                .submissionDate(new Date())
                 .description(fullDescription)
                 .status(StatusOfRepairEnum.PENDING)
                 .isActive(true)

@@ -75,35 +75,39 @@ public class PropertyOwnerRepository implements Repository<PropertyOwner> {
 
     public PropertyOwner searchByEmail(String email) {
 
-        List<PropertyOwner> owner = entityManager.createQuery("SELECT po FROM PropertyOwner po WHERE po.email LIKE: givenEmail")
-                .setParameter("givenEmail", email)
-                .getResultList();
+        List<PropertyOwner> owners = entityManager.createQuery(
+            "SELECT po FROM PropertyOwner po WHERE po.email = :givenEmail", PropertyOwner.class)
+            .setParameter("givenEmail", email)
+            .getResultList();
 
-        if (owner.isEmpty()) {
+        if (owners.isEmpty()) {
             throw new OwnerNotFoundException("This is not an existing owner");
         }
 
-        if (owner.get(0).getIsActive() == false) {
-            throw new OwnerNotFoundException("This is not an existing owner");
+        PropertyOwner owner = owners.get(0);
+        if (!owner.getIsActive()) {
+            throw new OwnerNotFoundException("Owner with email " + owner.getEmail() + " is inactive.");
         }
 
-        return (PropertyOwner) owner.get(0);
-    }//TODO
+        return owner;
+    }
 
     public PropertyOwner searchByVat(Long vat) {
 
-        List<PropertyOwner> owner = entityManager.createQuery("SELECT po FROM PropertyOwner po WHERE po.vat LIKE ?1")
-                .setParameter(1, vat)
+        List<PropertyOwner> owners = entityManager.createQuery(
+                "SELECT po FROM PropertyOwner po WHERE po.vat = :vat", PropertyOwner.class)
+                .setParameter("vat", vat)
                 .getResultList();
 
-        if (owner.isEmpty()) {
-            throw new OwnerNotFoundException("This is not an existing owner");
+        if (owners.isEmpty()) {
+            throw new OwnerNotFoundException("No owner found with VAT containing: " + vat);
         }
 
-        if (owner.get(0).getIsActive() == false) {
-            throw new OwnerNotFoundException("This is not an existing owner");
+        PropertyOwner owner = owners.get(0);
+        if (!owner.getIsActive()) {
+            throw new OwnerNotFoundException("Owner with VAT " + owner.getVat() + " is inactive.");
         }
 
-        return (PropertyOwner) owner.get(0);
-    }//TODO
+        return owner;
+    }
 }

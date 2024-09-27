@@ -15,4 +15,5 @@ public interface PropertyService {
     Property deleteProperty(Long id);
     Property softDeleteProperty(Long id);
     List<Property> findPropertiesByOwnerId(Long ownerId);
+    Optional<Property> findById(Long id);
 }

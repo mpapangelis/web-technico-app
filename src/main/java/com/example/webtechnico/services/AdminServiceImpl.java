@@ -15,6 +15,7 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,7 +62,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public PropertyRepair repairProposition(Long repairId, String newStatus, LocalDate proposedStartDate, LocalDate proposedEndDate, int proposedCost)
+    public PropertyRepair repairProposition(Long repairId, String newStatus, Date proposedStartDate, Date proposedEndDate, int proposedCost)
             throws PropertyNotFoundException, InvalidInputException {
         // Find the repair by ID
         Optional<PropertyRepair> optionalPropertyRepair = propertyRepairRepository.findById(repairId);
@@ -77,6 +78,10 @@ public class AdminServiceImpl implements AdminService {
                 repair.setStatus(statusEnum);
             } catch (IllegalArgumentException e) {
                 throw new InvalidInputException("Invalid status: " + newStatus);
+            }
+            
+            if (proposedStartDate != null && proposedEndDate != null && !proposedStartDate.before(proposedEndDate)) {
+                throw new InvalidInputException("Proposed start date must be before the proposed end date.");
             }
 
             // Update the proposed cost and dates

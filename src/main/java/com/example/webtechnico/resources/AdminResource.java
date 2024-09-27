@@ -1,13 +1,19 @@
 package com.example.webtechnico.resources;
 
+import com.example.webtechnico.exceptions.InvalidInputException;
+import com.example.webtechnico.exceptions.PropertyNotFoundException;
 import com.example.webtechnico.exceptions.ResourceNotFoundException;
+import com.example.webtechnico.models.Property;
 import com.example.webtechnico.models.PropertyRepair;
 import com.example.webtechnico.services.AdminService;
 import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -73,6 +79,51 @@ public class AdminResource {
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                            .entity("Failed to retrieve pending repairs.")
+                           .build();
+        }
+    }
+    
+    @PermitAll
+    @GET
+    @Path("/properties")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllProperties() {
+        try {
+            List<Property> properties = adminService.getAllProperties();
+            return Response.ok(properties).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                           .entity("Failed to retrieve properties: " + e.getMessage())
+                           .build();
+        }
+    }
+    
+    @PermitAll
+    @POST
+    @Path("/repairProposition/{repairId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateRepairProposition(@PathParam("repairId") Long repairId, PropertyRepair propertyRepair) {
+        try {
+            PropertyRepair updatedRepair = adminService.repairProposition(
+                repairId,
+                propertyRepair.getStatus().name(),
+                propertyRepair.getProposedStartDate(),
+                propertyRepair.getProposedEndDate(),
+                propertyRepair.getProposedCost()
+            );
+            return Response.ok(updatedRepair).build();
+        } catch (PropertyNotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                           .entity("Repair with ID " + repairId + " not found.")
+                           .build();
+        } catch (InvalidInputException e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                           .entity("Invalid input: " + e.getMessage())
+                           .build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                           .entity("Failed to update repair: " + e.getMessage())
                            .build();
         }
     }

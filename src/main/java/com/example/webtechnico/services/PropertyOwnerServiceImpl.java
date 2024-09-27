@@ -114,59 +114,60 @@ public class PropertyOwnerServiceImpl implements PropertyOwnerService{
     }
 
     @Override
-    public void update(PropertyOwner updatedPropertyOwner) throws InvalidInputException, PropertyOwnerExistsException, OwnerNotFoundException {
-
-        // checks if the id of the updatedPropertyOwner belongs to an existing user. Throws an exception otherwise
-        PropertyOwner existingOwner = get(updatedPropertyOwner.getId());
-        try {
-
-            // only three fields can be updated
-            if (!existingOwner.getFirstName().equals(updatedPropertyOwner.getFirstName()) ||
-                    !existingOwner.getLastName().equals(updatedPropertyOwner.getLastName()) ||
-                    !existingOwner.getPhoneNumber().equals(updatedPropertyOwner.getPhoneNumber()) ||
-                    !existingOwner.getVat().equals(updatedPropertyOwner.getVat()) ||
-                    !existingOwner.getUserName().equals(updatedPropertyOwner.getUserName()) ||
-                     existingOwner.getIsActive()!=updatedPropertyOwner.getIsActive()){
-
-                throw new InvalidInputException("You tried to update an unmodifiable field. You can only update the email, password and address");
-            }
-
-            // if the address is changed
-            if (!existingOwner.getAddress().equals(updatedPropertyOwner.getAddress())) {
-                existingOwner.setAddress(updatedPropertyOwner.getAddress());
-            }
-
-            // if the password is changed and of a certain pattern
-//            if (!existingOwner.getPassword().equals(updatedPropertyOwner.getPassword())) {
-//                if (!PatternService.PASSWORD_PATTERN.matcher(updatedPropertyOwner.getPassword().trim()).matches()) {
-//                    throw new InvalidInputException("This is not a valid password");
-//                }
-//                existingOwner.setPassword(updatedPropertyOwner.getPassword());
-//
-//            }
-//
-//            // if the email is changed and of a certain pattern
-//            if (!existingOwner.getEmail().equals(updatedPropertyOwner.getEmail())) {
-//                if (!PatternService.EMAIL_PATTERN.matcher(updatedPropertyOwner.getEmail().trim()).matches()) {
-//                    throw new InvalidInputException("This is not a valid email");
-//                }
-//
-//                // if the email exists in the database it throws an exception
-//                PropertyOwner existingOwnerEmail = null;
-//                try {
-//                    existingOwnerEmail = propertyOwnerRepository.searchByEmail(updatedPropertyOwner.getEmail());
-//                    throw new PropertyOwnerExistsException("This email is already being used");
-//                } catch (OwnerNotFoundException e) {
-//                    existingOwner.setEmail(updatedPropertyOwner.getEmail());
-//                }
-//            }
-
-            propertyOwnerRepository.update(existingOwner);
-
-        // throws an exception if something goes wrong with the propertyOwnerRepository.update
-        } catch (PersistenceException e) {
-            throw new OwnerNotFoundException("This is not an existing owner");
+    public PropertyOwner update(Long id, String firstName, String lastName, String email, String userName, String phoneNumber, String address, Long vat) {
+        Optional<PropertyOwner> ownerToUpdateCheck = propertyOwnerRepository.findById(id);
+        if (!ownerToUpdateCheck.isPresent() || !ownerToUpdateCheck.get().getIsActive()) {
+            throw new OwnerNotFoundException("Owner with ID " + id + " does not exist or is inactive.");
         }
+
+        PropertyOwner ownerToUpdate = ownerToUpdateCheck.get();
+
+        if (firstName != null) {
+            ownerToUpdate.setFirstName(firstName);
+        }
+
+        if (lastName != null) {
+            ownerToUpdate.setLastName(lastName);
+        }
+
+        if (email != null) {
+//            Optional<PropertyOwner> existingOwnerWithSameEmail = propertyOwnerRepository.searchByEmail(email);
+//            if (existingOwnerWithSameEmail.isPresent() && !existingOwnerWithSameEmail.get().getId().equals(id)) {
+//                throw new DuplicateEntryException("Email " + email + " is already associated with another owner.");
+//            }
+            ownerToUpdate.setEmail(email);
+        }
+
+        if (userName != null) {
+            ownerToUpdate.setUserName(userName);
+        }
+
+        if (phoneNumber != null) {
+            ownerToUpdate.setPhoneNumber(Long.valueOf(phoneNumber));
+        }
+
+        if (address != null) {
+            ownerToUpdate.setAddress(address);
+        }
+
+        if (vat != null) {
+            ownerToUpdate.setVat(vat);
+        }
+
+        propertyOwnerRepository.update(ownerToUpdate);
+
+        return ownerToUpdate;
+
+    }
+
+    @Override
+    public PropertyOwner findByEmail(String email) throws OwnerNotFoundException{
+        return propertyOwnerRepository.searchByEmail(email);
+    }
+
+    @Override
+    public PropertyOwner findByVat(Long vat) throws OwnerNotFoundException{
+        return propertyOwnerRepository.searchByVat(vat);
     }
 
 }

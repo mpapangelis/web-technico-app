@@ -192,4 +192,24 @@ public class PropertyResource {
                     .build();
         }
     }
+    
+    @PermitAll
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findPropertyById(@PathParam("id") Long id) {
+        try {
+            Property property = propertyService.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Property not found"));
+            return Response.ok(property).build();
+        } catch (ResourceNotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("Property not found: " + e.getMessage())
+                    .build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error retrieving property: " + e.getMessage())
+                    .build();
+        }
+    }
 }
